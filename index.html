@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vault-Tec Cost Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Left Stats Panel (Red Area) -->
+        <div class="stats-panel">
+            <h2>V.A.T.S. ANALYTICS</h2>
+            
+            <div class="stats-section">
+                <h3>PROFIT DISTRIBUTION</h3>
+                <div class="stat-item">
+                    <span>Person 1 (40%):</span>
+                    <span id="p1Profit">0 CAPS</span>
+                </div>
+                <div class="stat-item">
+                    <span>Person 2 (30%):</span>
+                    <span id="p2Profit">0 CAPS</span>
+                </div>
+                <div class="stat-item">
+                    <span>Person 3 (30%):</span>
+                    <span id="remainingProfit">0 CAPS</span>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <h3>EXPENSE BREAKDOWN</h3>
+                <canvas id="expenseChart" class="pip-boy-chart"></canvas>
+            </div>
+
+            <div class="stats-section">
+                <h3>PROFIT ANALYSIS</h3>
+                <canvas id="profitChart" class="pip-boy-chart"></canvas>
+            </div>
+
+            <div class="stats-section">
+                <h3>KEY METRICS</h3>
+                <div class="stat-item">
+                    <span>PROFIT MARGIN:</span>
+                    <span id="profitMargin">0%</span>
+                </div>
+                <div class="stat-item">
+                    <span>MONTHLY RATIO:</span>
+                    <span id="monthlyRatio">0%</span>
+                </div>
+                <div class="stat-item">
+                    <span>BREAK-EVEN MONTHS:</span>
+                    <span id="breakEvenMonths">0</span>
+                </div>
+            </div>
+
+            <div class="stats-section formulas">
+                <h3>FORMULAS</h3>
+                <div class="formula-item">
+                    <span>MIN PRICE = TOTAL × (1 + MIN%) × (1 + TAX%)</span>
+                </div>
+                <div class="formula-item">
+                    <span>TOTAL = ONE-TIME + (MONTHLY × MONTHS)</span>
+                </div>
+                <div class="formula-item">
+                    <span>P1 = PROFIT × 0.4</span>
+                </div>
+                <div class="formula-item">
+                    <span>P2 = PROFIT × 0.3</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Calculator (Center) -->
+        <div class="pip-boy-container">
+            <div class="screen-overlay"></div>
+            <div class="pip-boy-screen">
+                <div class="header">
+                    <h1>VAULT-TEC COST CALCULATOR</h1>
+                    <div class="status-bar">
+                        <span>OPERATING NORMALLY</span>
+                        <span class="blink">_</span>
+                        <button id="settingsBtn" class="pip-boy-button settings-btn">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="main-content">
+                    <div class="input-section">
+                        <label>MAX SALE PRICE (CAPS):</label>
+                        <input type="text" id="maxPrice" class="pip-boy-input" placeholder="0">
+                    </div>
+
+                    <div class="expenses-section">
+                        <h2>ONE-TIME EXPENSES</h2>
+                        <div id="oneTimeExpenses" class="expenses-list">
+                            <!-- Dynamic content here -->
+                        </div>
+                        <button onclick="addOneTimeExpense()" class="pip-boy-button">ADD EXPENSE</button>
+                    </div>
+
+                    <div class="months-section">
+                        <label>NUMBER OF MONTHS:</label>
+                        <input type="number" id="months" class="pip-boy-input" value="1" min="1">
+                    </div>
+
+                    <div class="expenses-section">
+                        <h2>MONTHLY EXPENSES</h2>
+                        <div id="monthlyExpenses" class="expenses-list">
+                            <!-- Dynamic content here -->
+                        </div>
+                        <button onclick="addMonthlyExpense()" class="pip-boy-button">ADD EXPENSE</button>
+                    </div>
+
+                    <div class="calculations-section">
+                        <h2>CALCULATIONS PARAMETERS</h2>
+                        <div class="calc-inputs">
+                            <div class="calc-group">
+                                <label>MIN VIABLE PERCENTAGE (%):</label>
+                                <input type="text" id="minViablePercentage" class="pip-boy-input" value="20" placeholder="0">
+                            </div>
+                            <div class="calc-group">
+                                <label>TAX RATE (%):</label>
+                                <input type="text" id="taxRate" class="pip-boy-input" value="15" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results-section">
+                        <div class="result-item highlight">
+                            <span>AVAILABLE BUDGET (after tax):</span>
+                            <span id="availableBudget">0 CAPS</span>
+                        </div>
+                        <div class="result-item">
+                            <span>TOTAL ONE-TIME:</span>
+                            <span id="totalOneTime">0 CAPS</span>
+                        </div>
+                        <div class="result-item">
+                            <span>TOTAL MONTHLY:</span>
+                            <span id="totalMonthly">0 CAPS</span>
+                        </div>
+                        <div class="result-item">
+                            <span>TOTAL EXPENSES:</span>
+                            <span id="finalTotal">0 CAPS</span>
+                        </div>
+                        <div class="result-item highlight">
+                            <span>MIN VIABLE PRICE:</span>
+                            <span id="minViablePrice">0 CAPS</span>
+                        </div>
+                        <div class="result-item">
+                            <span>REMAINING BUDGET:</span>
+                            <span id="remainingBudget">0 CAPS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Chat Panel (Blue Area) -->
+        <div class="chat-panel">
+            <h2>DOCUMENT ANALYSIS</h2>
+            <div class="doc-analysis-container">
+                <div class="document-section">
+                    <div class="upload-section">
+                        <label for="pdfUpload" class="pip-boy-button">UPLOAD EDITAL</label>
+                        <input type="file" id="pdfUpload" accept=".pdf" style="display: none;">
+                    </div>
+                    <div id="documentInfo" class="document-info" style="display: none;">
+                        <h3>EXTRACTED INFO</h3>
+                        <div class="info-item">
+                            <span class="info-label">PREÇO MÁXIMO:</span>
+                            <span id="maxPriceExtracted" class="info-value">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">PROVA DE CONCEITO:</span>
+                            <span id="proofOfConcept" class="info-value">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">CAPITAL SOCIAL:</span>
+                            <span id="minCapital" class="info-value">-</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">ATESTADO TÉCNICO:</span>
+                            <span id="technicalProof" class="info-value">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-section">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages"></div>
+                        <div class="chat-input-container">
+                            <input type="text" id="chatInput" class="pip-boy-input" placeholder="Talk to RobCo AI...">
+                            <button id="sendMessage" class="pip-boy-button">SEND</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h2>RobCo Terminal Settings</h2>
+            <div class="settings-group">
+                <label>Ollama Server IP:</label>
+                <input type="text" id="ollamaIp" class="pip-boy-input" value="192.168.15.115">
+            </div>
+            <div class="settings-group">
+                <label>Selected Model:</label>
+                <select id="modelSelect" class="pip-boy-input">
+                    <option value="loading">Loading models...</option>
+                </select>
+            </div>
+            <div class="settings-group">
+                <button id="saveSettings" class="pip-boy-button">SAVE SETTINGS</button>
+                <button id="closeSettings" class="pip-boy-button">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
